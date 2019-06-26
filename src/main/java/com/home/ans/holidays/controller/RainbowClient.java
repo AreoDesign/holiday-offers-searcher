@@ -5,6 +5,7 @@ import com.home.ans.holidays.dictionary.Request;
 import com.home.ans.holidays.service.RainbowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,13 @@ public class RainbowClient {
 
     private RainbowService rainbowService;
     private TravelRequest travelRequest;
+
+    @GetMapping("/single-shot-request")
+    public HttpStatus singleShotRequest() {
+        ResponseEntity response = this.getDefaultResponse();
+        //todo: implement here
+        return HttpStatus.OK;
+    }
 
     @GetMapping("/default")
     public ResponseEntity getDefaultResponse() {

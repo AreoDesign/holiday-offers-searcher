@@ -21,7 +21,7 @@ public class RainbowService {
 
     public ResponseEntity requestForOffers(URI url, HttpEntity requestEntity) {
         try {
-            ResponseEntity<String> response = restTemplate.exchange(
+            ResponseEntity response = restTemplate.exchange(
                     url,
                     HttpMethod.POST,
                     requestEntity,

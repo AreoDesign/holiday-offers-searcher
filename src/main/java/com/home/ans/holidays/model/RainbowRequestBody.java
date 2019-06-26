@@ -1,5 +1,6 @@
 package com.home.ans.holidays.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,5 +24,29 @@ public class RainbowRequestBody {
     private List<String> typyTransportu;
     private List<String> wyzywienia;
     private Paginacja paginacja;
+
+    @Data
+    @AllArgsConstructor
+    public class Konfiguracja {
+        private List<String> wiek;
+        private String liczbaPokoi;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public class Paginacja {
+        private String przeczytane;
+        private String iloscDoPobrania;
+    }
+
+    @Data
+    @AllArgsConstructor
+    public class Sortowanie {
+        private boolean czyPoDacie;
+        private boolean czyPoCenie;
+        private boolean czyPoOcenach;
+        private boolean czyPoPolecanych;
+        private boolean czyDesc;
+    }
 
 }

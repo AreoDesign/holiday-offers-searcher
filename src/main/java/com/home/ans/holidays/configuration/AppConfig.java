@@ -33,4 +33,5 @@ public class AppConfig {
     public DateTimeFormatter dateTimeFormatter() {
         return DateTimeFormatter.ISO_LOCAL_DATE;
     }
+
 }

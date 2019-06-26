@@ -2,8 +2,8 @@ package com.home.ans.holidays.configuration;
 
 import com.home.ans.holidays.component.TravelRequest;
 import com.home.ans.holidays.dictionary.Request;
-import com.home.ans.holidays.entity.OfferEntity;
-import com.home.ans.holidays.repository.OfferRepository;
+import com.home.ans.holidays.repository.RainbowOfferRepository;
+import com.home.ans.holidays.service.ParserService;
 import com.home.ans.holidays.service.RainbowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import java.time.Instant;
+import java.io.IOException;
 
 @Configuration
 @EnableScheduling
@@ -19,22 +19,25 @@ public class SpringConfig {
 
     private RainbowService rainbowService;
     private TravelRequest travelRequest;
-    private OfferRepository offerRepository;
+    private ParserService parserService;
+    private RainbowOfferRepository rainbowOfferRepository;
+//    private HotelRepository hotelRepository;
+
 
     @Scheduled(cron = "0 0 4,8,12,16,20 * * ?")
-    public void requestForTravelOffer() {
+    public void requestForTravelOffer() throws IOException {
         ResponseEntity response = rainbowService.requestForOffers(
                 Request.RAINBOW_TOURS.getUrl(),
                 travelRequest.prepareHttpEntity()
         );
 
-        response.getBody();
+        //todo: here parsing to simple Raw object
+//
+//        Pair<Hotel, Offer> entities = parserService.unparseOntoPair(response);
+//        Hotel hotel = hotelRepository.save(entities.getFirst());
+//        hotel.addOffer();
+//        rainbowOfferRepository.save(entities.getSecond());
 
-        OfferEntity offerEntity = OfferEntity.builder()
-                .inquiryDate(Instant.ofEpochMilli(response.getHeaders().getDate()))
-                .build();
-
-        offerRepository.save(offerEntity);
     }
 
     @Autowired
@@ -48,7 +51,18 @@ public class SpringConfig {
     }
 
     @Autowired
-    public void setOfferRepository(OfferRepository offerRepository) {
-        this.offerRepository = offerRepository;
+    public void setParserService(ParserService parserService) {
+        this.parserService = parserService;
     }
+
+    @Autowired
+    public void setRainbowOfferRepository(RainbowOfferRepository rainbowOfferRepository) {
+        this.rainbowOfferRepository = rainbowOfferRepository;
+    }
+
+//    @Autowired
+//    public void setHotelRepository(HotelRepository hotelRepository) {
+//        this.hotelRepository = hotelRepository;
+//    }
+
 }
