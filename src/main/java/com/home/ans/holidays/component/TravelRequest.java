@@ -3,7 +3,7 @@ package com.home.ans.holidays.component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.home.ans.holidays.model.RainbowRequestBody;
+import com.home.ans.holidays.model.dto.RainbowOfferRequestBody;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
@@ -25,8 +25,8 @@ public class TravelRequest {
         return new HttpEntity<>(gson.toJson(prepareBody()), headers);
     }
 
-    private RainbowRequestBody prepareBody() {
-        RainbowRequestBody requestBody = RainbowRequestBody.builder()
+    private RainbowOfferRequestBody prepareBody() {
+        RainbowOfferRequestBody requestBody = RainbowOfferRequestBody.builder()
                 .czyCenaZaWszystkich(false)
                 .czyGrupowac(true)
                 .hotel(ImmutableList.of("rodzinny"))

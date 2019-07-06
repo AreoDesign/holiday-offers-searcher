@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @RestController
 public class CustomErrorController implements ErrorController {
@@ -22,8 +21,7 @@ public class CustomErrorController implements ErrorController {
     //todo: add nice page view
     @RequestMapping(value = ERROR_URL)
     public HttpStatus handleError(HttpServletRequest request) {
-        Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-        String statusCode = Optional.ofNullable(status.toString()).orElse("404");
+        int statusCode = (int) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         return HttpStatus.valueOf(statusCode);
     }
 }

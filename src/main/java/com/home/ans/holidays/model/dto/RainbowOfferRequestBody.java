@@ -1,4 +1,4 @@
-package com.home.ans.holidays.model;
+package com.home.ans.holidays.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class RainbowRequestBody {
+public class RainbowOfferRequestBody {
 
     private Konfiguracja konfiguracja;
     private Sortowanie sortowanie;

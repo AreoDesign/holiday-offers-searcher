@@ -1,25 +1,14 @@
-package com.home.ans.holidays.entity;
+package com.home.ans.holidays.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "oferta_rainbow")
 @Data
 @Builder
-public class RainbowOfferEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+public class RainbowOfferDto {
     private LocalDateTime dataZapytania;
     private String ofertaId;
     private String ofertaUrl;
@@ -33,5 +22,4 @@ public class RainbowOfferEntity {
     private String nazwaHotelu;
     private Double gwiazdkiHotelu;
     private String lokalizacja;
-
 }

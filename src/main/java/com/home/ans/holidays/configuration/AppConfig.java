@@ -1,6 +1,9 @@
 package com.home.ans.holidays.configuration;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.home.ans.holidays.model.cdto.RainbowOfferClientDto;
+import com.home.ans.holidays.utils.RainbowJsonDeserializer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +28,9 @@ public class AppConfig {
     @Bean
     @Qualifier("gson")
     public Gson gson() {
-        return new Gson();
+        return new GsonBuilder()
+                .registerTypeAdapter(RainbowOfferClientDto.class, new RainbowJsonDeserializer())
+                .create();
     }
 
     @Bean
