@@ -40,7 +40,7 @@ public class ParserServiceImplTest {
 
     public static RainbowOfferClientDto prepareCdto() {
         return RainbowOfferClientDto.builder()
-                .dataZapytania(LocalDateTime.parse("Tue, 02 Jul 2019 18:25:55 GMT", DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)))
+                .dataZapytania(LocalDateTime.parse("Tue, 02 Jul 2019 18:25:55 GMT", DateTimeFormatter.ofPattern("EEE, dd MMM yyyy HH:mm:ss z", Locale.ENGLISH)).plusHours(2))
                 .ofertaId("zante-village_89776")
                 .ofertaUrl("/zakynthos-wczasy/zante-village?data=20190924&liczbaDoroslych=2&liczbaDzieci=1&liczbaPokoi=1&wiekDzieci=0&miastoWyjazdu=warszawa&wyzywienie=all-inclusive")
                 .dataWKodzieProduktu("2019-09-24T00:00:00Z")

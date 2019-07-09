@@ -34,9 +34,15 @@ public class AppConfig {
     }
 
     @Bean
+    @Qualifier("dateFormatter")
+    public DateTimeFormatter dateFormatter() {
+        return DateTimeFormatter.ISO_LOCAL_DATE;
+    }
+
+    @Bean
     @Qualifier("dateTimeFormatter")
     public DateTimeFormatter dateTimeFormatter() {
-        return DateTimeFormatter.ISO_LOCAL_DATE;
+        return DateTimeFormatter.ISO_LOCAL_DATE_TIME;
     }
 
 }

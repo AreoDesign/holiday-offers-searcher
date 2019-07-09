@@ -3,17 +3,20 @@ package com.home.ans.holidays.converter.mapstruct;
 import com.home.ans.holidays.converter.CdtoDtoConverter;
 import com.home.ans.holidays.model.cdto.RainbowOfferClientDto;
 import com.home.ans.holidays.model.dto.RainbowOfferDto;
+import org.mapstruct.DecoratedWith;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
 
 @Mapper(componentModel = "spring")
+@DecoratedWith(RainbowCdtoConverterDecorator.class)
 public interface RainbowCdtoDtoConverter extends CdtoDtoConverter<RainbowOfferDto, RainbowOfferClientDto> {
 
+    String RAINBOW_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+
     @Mappings({
-            @Mapping(target = "dataWKodzieProduktu", source = "clientDto.dataWKodzieProduktu", dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"),
-            @Mapping(target = "ocenaOgolna", source = "clientDto.ocenaOgolna", numberFormat = "#.##E0"),
+            @Mapping(target = "dataWKodzieProduktu", source = "clientDto.dataWKodzieProduktu", dateFormat = RAINBOW_DATE_TIME_FORMAT)
     })
     RainbowOfferDto toDto(RainbowOfferClientDto clientDto);
 

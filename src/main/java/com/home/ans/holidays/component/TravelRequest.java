@@ -71,7 +71,7 @@ public class TravelRequest {
     }
 
     @Autowired
-    @Qualifier("dateTimeFormatter")
+    @Qualifier("dateFormatter")
     public void setFormatter(DateTimeFormatter dateTimeFormatter) {
         this.formatter = dateTimeFormatter;
     }

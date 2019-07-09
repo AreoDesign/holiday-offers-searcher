@@ -28,7 +28,7 @@ public class ParserServiceImpl implements ParserService {
     private Type rainbowType = new TypeToken<ArrayList<RainbowOfferClientDto>>() {
     }.getType();
     private Function<ResponseEntity, LocalDateTime> headerDateTypeConverter = (response ->
-            LocalDateTime.ofInstant(Instant.ofEpochMilli(response.getHeaders().getDate()), ZoneId.of("GMT")));
+            LocalDateTime.ofInstant(Instant.ofEpochMilli(response.getHeaders().getDate()), ZoneId.of("GMT+2")));
     private Function<String, Collection<RainbowOfferClientDto>> offersParser = (responseBody -> {
         Map responseBodyMap = gson.fromJson(responseBody, Map.class);
         String jsonWithOffers = gson.toJson(responseBodyMap.get(KEY_FOR_OFFERS));
