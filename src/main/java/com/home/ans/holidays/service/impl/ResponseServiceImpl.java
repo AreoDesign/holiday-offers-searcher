@@ -1,6 +1,6 @@
 package com.home.ans.holidays.service.impl;
 
-import com.home.ans.holidays.service.RainbowService;
+import com.home.ans.holidays.service.ResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -17,7 +17,7 @@ import java.util.Objects;
 
 @Service
 @Slf4j
-public class RainbowServiceImpl implements RainbowService {
+public class ResponseServiceImpl implements ResponseService {
 
     private RestTemplate restTemplate;
 
@@ -29,7 +29,7 @@ public class RainbowServiceImpl implements RainbowService {
                     requestEntity,
                     String.class
             );
-            logResponseStatus(response);
+            logResponseStatus(response); // TODO: here add to drop Response into file
             return response;
         } catch (RestClientException ex) {
             log.error("There was an exception '{}' while processing request '{}' for URL: '{}', with root cause: \n{}",
@@ -42,8 +42,7 @@ public class RainbowServiceImpl implements RainbowService {
         if (Objects.isNull(response.getBody())) {
             log.error("Something went wrong - response body is null!");
         } else {
-            log.info("Response returned with status: {}\n------------- RESPONSE BODY: -------------\n{}",
-                    response.getStatusCodeValue(), response.getBody());
+            log.debug("Response returned with status: {}", response.getStatusCodeValue());
         }
     }
 

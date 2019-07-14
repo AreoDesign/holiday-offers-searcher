@@ -44,6 +44,7 @@ public class ParserServiceImplTest {
                 .ofertaId("zante-village_89776")
                 .ofertaUrl("/zakynthos-wczasy/zante-village?data=20190924&liczbaDoroslych=2&liczbaDzieci=1&liczbaPokoi=1&wiekDzieci=0&miastoWyjazdu=warszawa&wyzywienie=all-inclusive")
                 .dataWKodzieProduktu("2019-09-24T00:00:00Z")
+                .wyzywienie("all-inclusive")
                 .ocenaOgolna("4.60")
                 .cenaPrzedPromocja(1550)
                 .cenaAktualna(1550)

@@ -16,6 +16,7 @@ public enum Translator {
     OFERTA_ID("oferta_id", "ID", null),
     OFERTA_URL("oferta_url", "OfertaUrl", null),
     DATA_W_KODZIE_PRODUKTU("data_w_kodzie_produktu", "DataWKodzieProduktu", null),
+    WYZYWIENIE("wyzywienie", "NazwaUrl", "Wyzywienia"),
     OCENA_OGOLNA("ocena_ogolna", "OcenaOgolna", "Opinie"),
     CENA_PRZED_PROMOCJA("cena_przed_promocja", "CenaPrzedPromocja", "Ceny"),
     CENA_AKTUALNA("cena_aktualna", "CenaAktualna", "Ceny"),

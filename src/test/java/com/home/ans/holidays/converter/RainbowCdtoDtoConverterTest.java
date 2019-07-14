@@ -38,6 +38,7 @@ public class RainbowCdtoDtoConverterTest {
         assertThat(clientDto.getOfertaId()).isEqualTo(dto.getOfertaId());
         assertThat(RAINBOW_PREFIX + clientDto.getOfertaUrl()).isEqualTo(dto.getOfertaUrl());
         assertThat(stringToLocalDate(clientDto.getDataWKodzieProduktu())).isEqualTo(dto.getDataWKodzieProduktu());
+        assertThat(clientDto.getWyzywienie()).isEqualTo(dto.getWyzywienie());
         assertThat(Double.valueOf(clientDto.getOcenaOgolna())).isEqualTo(dto.getOcenaOgolna());
         assertThat(clientDto.getCenaPrzedPromocja()).isEqualTo(dto.getCenaPrzedPromocja());
         assertThat(clientDto.getCenaAktualna()).isEqualTo(dto.getCenaAktualna());

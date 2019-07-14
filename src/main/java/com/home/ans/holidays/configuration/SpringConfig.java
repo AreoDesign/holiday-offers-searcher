@@ -12,9 +12,9 @@ public class SpringConfig {
 
     private RainbowClient rainbowClient;
 
-    @Scheduled(cron = "0 0 0,4,8,12,16,20 * * ?")
+    @Scheduled(cron = "0 0 9,12,15,18,21 * * ?")
     public void requestForTravelOffer() {
-        rainbowClient.singleShotRequest();
+        rainbowClient.makeCascadeRequest();
     }
 
     @Autowired

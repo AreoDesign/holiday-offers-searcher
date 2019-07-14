@@ -13,6 +13,7 @@ public class RainbowOfferDto {
     private String ofertaId;
     private String ofertaUrl;
     private LocalDate dataWKodzieProduktu;
+    private String wyzywienie;
     private Double ocenaOgolna;
     private Integer cenaPrzedPromocja;
     private Integer cenaAktualna;

@@ -23,6 +23,7 @@ public class RainbowJsonDeserializer implements JsonDeserializer<RainbowOfferCli
                 .ofertaId(getString(json, Translator.OFERTA_ID))
                 .ofertaUrl(getString(json, Translator.OFERTA_URL))
                 .dataWKodzieProduktu(getString(json, Translator.DATA_W_KODZIE_PRODUKTU))
+                .wyzywienie(getStringFromJsonArray(json, Translator.WYZYWIENIE))
                 .ocenaOgolna(getStringFromNestedJson(json, Translator.OCENA_OGOLNA))
                 .cenaPrzedPromocja(getIntegerFromJsonArray(json, Translator.CENA_PRZED_PROMOCJA))
                 .cenaAktualna(getIntegerFromJsonArray(json, Translator.CENA_AKTUALNA))
@@ -63,6 +64,11 @@ public class RainbowJsonDeserializer implements JsonDeserializer<RainbowOfferCli
     private Integer getIntegerFromJsonArray(JsonObject jsonObject, Translator translator) {
         JsonArray jsonArray = jsonObject.get(translator.getNestName()).getAsJsonArray();
         return jsonArray.get(0).getAsJsonObject().get(translator.getResponseKey()).getAsInt();
+    }
+
+    private String getStringFromJsonArray(JsonObject jsonObject, Translator translator) {
+        JsonArray jsonArray = jsonObject.get(translator.getNestName()).getAsJsonArray();
+        return jsonArray.get(0).getAsJsonObject().get(translator.getResponseKey()).getAsString();
     }
 
 }

@@ -5,6 +5,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.net.URI;
 
-public interface RainbowService {
+public interface ResponseService {
     ResponseEntity requestForOffers(URI url, HttpEntity requestEntity);
 }
