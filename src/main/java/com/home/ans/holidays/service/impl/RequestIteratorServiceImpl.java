@@ -5,8 +5,9 @@ import com.home.ans.holidays.component.TravelRequest;
 import com.home.ans.holidays.converter.mapstruct.RainbowCdtoDtoConverter;
 import com.home.ans.holidays.dictionary.Request;
 import com.home.ans.holidays.model.dto.RainbowOfferDto;
-import com.home.ans.holidays.service.HelperService;
 import com.home.ans.holidays.service.ParserService;
+import com.home.ans.holidays.service.RequestIteratorService;
+import com.home.ans.holidays.service.ResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -19,13 +20,14 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class HelperServiceImpl implements HelperService {
+public class RequestIteratorServiceImpl implements RequestIteratorService {
 
     private TravelRequest travelRequest;
     private ParserService parserService;
-    private ResponseServiceImpl responseService;
+    private ResponseService responseService;
     private RainbowCdtoDtoConverter cdtoDtoConverter;
 
+    @Override
     public List<RainbowOfferDto> iterateRequests() {
         List<RainbowOfferDto> dtos = Lists.newLinkedList();
         List<RainbowOfferDto> singleShotOffers;
@@ -33,6 +35,8 @@ public class HelperServiceImpl implements HelperService {
         int cnt = 0;
         do {
             response = this.getResponse(travelRequest.prepareHttpEntity(cnt * travelRequest.getToDownload()));
+            //emergency loop exit
+            if (!response.getStatusCode().is2xxSuccessful()) break;
             singleShotOffers = convertToDto(response);
             dtos.addAll(singleShotOffers);
             cnt++;
@@ -62,7 +66,7 @@ public class HelperServiceImpl implements HelperService {
     }
 
     @Autowired
-    public void setResponseService(ResponseServiceImpl responseService) {
+    public void setResponseService(ResponseService responseService) {
         this.responseService = responseService;
     }
 

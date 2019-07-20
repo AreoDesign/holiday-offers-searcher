@@ -1,5 +1,6 @@
 package com.home.ans.holidays.service.impl;
 
+import com.home.ans.holidays.component.ResponseStorage;
 import com.home.ans.holidays.service.ResponseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +13,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.net.URI;
-import java.util.Objects;
 
 @Service
 @Slf4j
 public class ResponseServiceImpl implements ResponseService {
 
     private RestTemplate restTemplate;
+    private ResponseStorage responseStorage;
 
     public ResponseEntity requestForOffers(URI url, HttpEntity requestEntity) {
         try {
@@ -29,20 +31,17 @@ public class ResponseServiceImpl implements ResponseService {
                     requestEntity,
                     String.class
             );
-            logResponseStatus(response); // TODO: here add to drop Response into file
+            responseStorage.logStatus(response);
+            responseStorage.writeToFile(response);
+            responseStorage.cleanLogs(7);
             return response;
         } catch (RestClientException ex) {
             log.error("There was an exception '{}' while processing request '{}' for URL: '{}', with root cause: \n{}",
                     ex.getClass().getSimpleName(), requestEntity, url, ex.getStackTrace());
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-    }
-
-    private void logResponseStatus(ResponseEntity response) {
-        if (Objects.isNull(response.getBody())) {
-            log.error("Something went wrong - response body is null!");
-        } else {
-            log.debug("Response returned with status: {}", response.getStatusCodeValue());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).build();
         }
     }
 
@@ -52,4 +51,8 @@ public class ResponseServiceImpl implements ResponseService {
         this.restTemplate = restTemplate;
     }
 
+    @Autowired
+    public void setResponseStorage(ResponseStorage responseStorage) {
+        this.responseStorage = responseStorage;
+    }
 }

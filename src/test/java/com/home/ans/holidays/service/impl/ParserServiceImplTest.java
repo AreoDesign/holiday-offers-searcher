@@ -57,7 +57,7 @@ public class ParserServiceImplTest {
                 .build();
     }
 
-    private String prepareResponseBodyJson() {
+    public static String prepareResponseBodyJson() {
         return "{\n" +
                 "  \"CzyPominieteDaty\": false,\n" +
                 "  \"CzyPominieteMiastaWyjazdu\": false,\n" +
