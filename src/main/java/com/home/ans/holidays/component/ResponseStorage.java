@@ -29,13 +29,13 @@ public class ResponseStorage {
     private static final String PATH_SEPARATOR = "\\";
 
     @Value("${travel.directory}")
-    private String directory;
+    private String DIRECTORY;
 
     @Value("${travel.filename}")
-    private String filename;
+    private String FILENAME;
 
     @Value("${travel.extension}")
-    private String extension;
+    private String EXTENSION;
 
     private Function<ResponseEntity, LocalDateTime> headerDateTypeConverter;
 
@@ -101,13 +101,13 @@ public class ResponseStorage {
         return System.getenv("HOMEDRIVE")
                 .concat(System.getenv("HOMEPATH"))
                 .concat(PATH_SEPARATOR)
-                .concat(directory)
+                .concat(DIRECTORY)
                 .concat(PATH_SEPARATOR)
-                .concat(filename)
+                .concat(FILENAME)
                 .concat("_")
                 .concat(LocalDateTime.now().format(DateTimeFormatter.ofPattern(FILE_TIME_FORMAT)))
                 .concat(".")
-                .concat(extension);
+                .concat(EXTENSION);
     }
 
     @Autowired
