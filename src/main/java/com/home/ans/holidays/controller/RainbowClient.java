@@ -40,8 +40,8 @@ public class RainbowClient {
             Arrays.asList("all-inclusive", "3-posilki").contains(offer.getWyzywienie()) &&
             offer.getDataWKodzieProduktu().isAfter(LocalDate.of(2019, 9, 1)) &&
             offer.getDataWKodzieProduktu().isBefore(LocalDate.of(2019, 9, 30)) &&
-            (offer.getGwiazdkiHotelu() > 4d && offer.getCenaAktualna() < 1500) ||
-            (offer.getGwiazdkiHotelu() > 3d && offer.getCenaAktualna() < 1200);
+            ((offer.getGwiazdkiHotelu() > 4d && offer.getCenaAktualna() < 1500) ||
+                    (offer.getGwiazdkiHotelu() > 3d && offer.getCenaAktualna() < 1200));
 
     @GetMapping("/offer")
     public ResponseEntity makeCascadeRequest() {
