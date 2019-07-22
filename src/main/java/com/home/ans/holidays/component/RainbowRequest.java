@@ -3,7 +3,7 @@ package com.home.ans.holidays.component;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.home.ans.holidays.model.dto.RainbowRequestPayload;
+import com.home.ans.holidays.model.dto.RainbowPayload;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @Component
 @Data
-public class TravelRequest {
+public class RainbowRequest {
     //Beans to inject:
     private Gson gson;
     private DateTimeFormatter formatter;
@@ -36,20 +36,18 @@ public class TravelRequest {
 
     public HttpEntity prepareHttpEntity(int read) {
         this.read = read;
+        return prepareHttpEntity();
+    }
+
+    private HttpEntity prepareHttpEntity() {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
         return new HttpEntity<>(gson.toJson(prepareBody()), headers);
     }
 
-    public HttpEntity prepareHttpEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(gson.toJson(prepareBody()), headers);
-    }
+    private RainbowPayload prepareBody() {
 
-    private RainbowRequestPayload prepareBody() {
-
-        RainbowRequestPayload requestBody = RainbowRequestPayload.builder()
+        RainbowPayload requestBody = RainbowPayload.builder()
                 .czyCenaZaWszystkich(false)
                 .czyGrupowac(true)
                 .hotel(ImmutableList.of("rodzinny"))

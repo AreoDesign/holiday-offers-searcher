@@ -1,12 +1,13 @@
 package com.home.ans.holidays.controller;
 
-import com.home.ans.holidays.converter.mapstruct.RainbowEntityDtoConverter;
+import com.home.ans.holidays.converter.mapstruct.rainbow.RainbowEntityDtoConverter;
 import com.home.ans.holidays.entity.RainbowOfferEntity;
 import com.home.ans.holidays.model.dto.RainbowOfferDto;
 import com.home.ans.holidays.presentation.RainbowDataImporter;
 import com.home.ans.holidays.repository.RainbowOfferRepository;
 import com.home.ans.holidays.service.NotificationService;
 import com.home.ans.holidays.service.RequestIteratorService;
+import com.home.ans.holidays.service.impl.RequestIteratorServiceRainbowImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -45,13 +46,13 @@ public class RainbowClient {
 
     @GetMapping("/offer")
     public ResponseEntity makeCascadeRequest() {
-        List<RainbowOfferDto> dtos = requestIteratorService.iterateRequests();
+        List<RainbowOfferDto> dtos = (List<RainbowOfferDto>) requestIteratorService.iterateRequests();
         List<RainbowOfferEntity> entities = dtos.stream()
                 .map(entityDtoConverter::toEntity)
                 .collect(Collectors.toList());
         entities = rainbowOfferRepository.saveAll(entities);
 
-        entities.stream().filter(notificationCriterion).forEach(offer -> notificationService.notifyAboutOffer(offer));
+        entities.stream().filter(notificationCriterion).forEach(offer -> notificationService.notifyAboutRainbowOffer(offer));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.DATE, LocalDateTime.now().toString())
@@ -77,7 +78,7 @@ public class RainbowClient {
     }
 
     @Autowired
-    public void setRequestIteratorService(RequestIteratorService requestIteratorService) {
+    public void setRequestIteratorService(RequestIteratorServiceRainbowImpl requestIteratorService) {
         this.requestIteratorService = requestIteratorService;
     }
 

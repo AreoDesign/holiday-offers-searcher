@@ -1,9 +1,10 @@
 package com.home.ans.holidays.service.impl;
 
 import com.google.common.collect.Lists;
-import com.home.ans.holidays.component.TravelRequest;
-import com.home.ans.holidays.converter.mapstruct.RainbowCdtoDtoConverter;
+import com.home.ans.holidays.component.RainbowRequest;
+import com.home.ans.holidays.converter.mapstruct.rainbow.RainbowCdtoDtoConverter;
 import com.home.ans.holidays.dictionary.Request;
+import com.home.ans.holidays.model.cdto.RainbowOfferClientDto;
 import com.home.ans.holidays.model.dto.RainbowOfferDto;
 import com.home.ans.holidays.service.ParserService;
 import com.home.ans.holidays.service.RequestIteratorService;
@@ -15,14 +16,15 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class RequestIteratorServiceImpl implements RequestIteratorService {
+public class RequestIteratorServiceRainbowImpl implements RequestIteratorService {
 
-    private TravelRequest travelRequest;
+    private RainbowRequest rainbowRequest;
     private ParserService parserService;
     private ResponseService responseService;
     private RainbowCdtoDtoConverter cdtoDtoConverter;
@@ -34,7 +36,7 @@ public class RequestIteratorServiceImpl implements RequestIteratorService {
         ResponseEntity response;
         int cnt = 0;
         do {
-            response = this.getResponse(travelRequest.prepareHttpEntity(cnt * travelRequest.getToDownload()));
+            response = this.getResponse(rainbowRequest.prepareHttpEntity(cnt * rainbowRequest.getToDownload()));
             //emergency loop exit
             if (!response.getStatusCode().is2xxSuccessful()) break;
             singleShotOffers = convertToDto(response);
@@ -43,8 +45,8 @@ public class RequestIteratorServiceImpl implements RequestIteratorService {
         }
         while (response.getStatusCode().is2xxSuccessful() && !singleShotOffers.isEmpty());
 
-        if (dtos.size() != 0) log.info("Successfully downloaded {} offers.", dtos.size());
-        else log.warn("No offer matching given criteria downloaded!");
+        if (dtos.size() != 0) log.info("Successfully downloaded {} RainbowTours offers.", dtos.size());
+        else log.warn("No RainbowTours offer matching given criteria downloaded!");
 
         return dtos;
     }
@@ -54,7 +56,8 @@ public class RequestIteratorServiceImpl implements RequestIteratorService {
     }
 
     private List<RainbowOfferDto> convertToDto(ResponseEntity response) {
-        return parserService.parse(response).stream()
+        Collection<RainbowOfferClientDto> cdtos = (Collection<RainbowOfferClientDto>) parserService.parse(response);
+        return cdtos.stream()
                 .map(cdtoDtoConverter::toDto)
                 .collect(Collectors.toList());
     }
@@ -71,13 +74,13 @@ public class RequestIteratorServiceImpl implements RequestIteratorService {
     }
 
     @Autowired
-    public void setParserService(ParserService parserService) {
+    public void setParserService(ParserServiceRainbowImpl parserService) {
         this.parserService = parserService;
     }
 
     @Autowired
-    public void setTravelRequest(TravelRequest travelRequest) {
-        this.travelRequest = travelRequest;
+    public void setRainbowRequest(RainbowRequest rainbowRequest) {
+        this.rainbowRequest = rainbowRequest;
     }
 
 }

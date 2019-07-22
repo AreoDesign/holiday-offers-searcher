@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @AllArgsConstructor
-public enum Translator {
+public enum RainbowTranslator {
 
     OFERTA_ID("oferta_id", "ID", null),
     OFERTA_URL("oferta_url", "OfertaUrl", null),
@@ -33,14 +33,14 @@ public enum Translator {
     private String nestName;
 
     public static List<String> getResponseKeys() {
-        return Arrays.stream(Translator.values())
-                .map(Translator::getResponseKey)
+        return Arrays.stream(RainbowTranslator.values())
+                .map(RainbowTranslator::getResponseKey)
                 .collect(Collectors.toList());
     }
 
     public static List<String> getNestedResponseKeys() {
-        return Arrays.stream(Translator.values())
-                .map(Translator::getNestName)
+        return Arrays.stream(RainbowTranslator.values())
+                .map(RainbowTranslator::getNestName)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }

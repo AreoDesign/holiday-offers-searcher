@@ -1,4 +1,4 @@
-package com.home.ans.holidays.converter.mapstruct;
+package com.home.ans.holidays.converter.mapstruct.rainbow;
 
 import com.home.ans.holidays.converter.CdtoDtoConverter;
 import com.home.ans.holidays.model.cdto.RainbowOfferClientDto;

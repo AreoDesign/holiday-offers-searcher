@@ -1,4 +1,4 @@
-package com.home.ans.holidays.converter.mapstruct;
+package com.home.ans.holidays.converter.mapstruct.rainbow;
 
 import com.home.ans.holidays.converter.EntityDtoConverter;
 import com.home.ans.holidays.entity.RainbowOfferEntity;

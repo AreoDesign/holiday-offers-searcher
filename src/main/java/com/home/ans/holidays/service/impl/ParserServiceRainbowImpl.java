@@ -19,7 +19,7 @@ import java.util.function.Function;
 
 @Service
 @Slf4j
-public class ParserServiceImpl implements ParserService {
+public class ParserServiceRainbowImpl implements ParserService {
 
     private static final String KEY_FOR_OFFERS = "Bloczki";
     private Function<ResponseEntity, LocalDateTime> headerDateTypeConverter;

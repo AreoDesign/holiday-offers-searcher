@@ -1,11 +1,11 @@
 package com.home.ans.holidays.service;
 
-import com.home.ans.holidays.model.dto.RainbowOfferDto;
+import com.home.ans.holidays.model.dto.OfferDto;
 
 import java.util.List;
 
 public interface RequestIteratorService {
 
-    List<RainbowOfferDto> iterateRequests();
+    List<? extends OfferDto> iterateRequests();
 
 }

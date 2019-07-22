@@ -9,7 +9,8 @@ import java.net.URI;
 @AllArgsConstructor
 public enum Request {
 
-    RAINBOW_TOURS(URI.create("https://rpl-api.r.pl/szukaj/api/wyszukaj"));
+    RAINBOW_TOURS(URI.create("https://rpl-api.r.pl/szukaj/api/wyszukaj")),
+    TUI(URI.create("https://www.tui.pl/search/offers"));
 
     private URI url;
 }
