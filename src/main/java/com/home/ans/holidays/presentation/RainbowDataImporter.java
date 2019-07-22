@@ -19,8 +19,8 @@ public class RainbowDataImporter {
 
     public void toXls() throws IOException {
         List<RainbowOfferEntity> offers = rainbowOfferRepository.findAll();
-        List<String> headers = Arrays.asList("lokalizacja", "nazwa hotelu", "cena aktualna", "wyżywienie", "gwiazdki hotelu", "liczba dni", "data wyjazdu", "ocena ogólna");
-        String props = "lokalizacja, nazwaHotelu, cenaAktualna, wyzywienie, gwiazdkiHotelu, liczbaDni, dataWKodzieProduktu, ocenaOgolna";
+        List<String> headers = Arrays.asList("lokalizacja", "nazwa hotelu", "cena aktualna", "wyżywienie", "gwiazdki hotelu", "liczba dni", "data wyjazdu", "ocena ogólna", "data zapytania");
+        String props = "lokalizacja, nazwaHotelu, cenaAktualna, wyzywienie, gwiazdkiHotelu, liczbaDni, dataWKodzieProduktu, ocenaOgolna, dataZapytania";
         try (OutputStream os = new FileOutputStream("target/rainbow_offers_summary.xls")) {
             SimpleExporter exporter = new SimpleExporter();
             exporter.gridExport(headers, offers, props, os);

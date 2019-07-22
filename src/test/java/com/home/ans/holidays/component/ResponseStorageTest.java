@@ -28,9 +28,9 @@ public class ResponseStorageTest {
     @Before
     public void init() {
         MockitoAnnotations.initMocks(this);
-        ReflectionTestUtils.setField(responseStorage, "directory", "\\MyApps\\Travel-Searcher");
-        ReflectionTestUtils.setField(responseStorage, "filename", "response_api");
-        ReflectionTestUtils.setField(responseStorage, "extension", "log");
+        ReflectionTestUtils.setField(responseStorage, "DIRECTORY", "\\MyApps\\Travel-Searcher");
+        ReflectionTestUtils.setField(responseStorage, "FILENAME", "response_api");
+        ReflectionTestUtils.setField(responseStorage, "EXTENSION", "log");
     }
 
     @Test
@@ -48,6 +48,5 @@ public class ResponseStorageTest {
         return ResponseEntity.ok()
                 .body(prepareResponseBodyJson());
     }
-
 
 }
