@@ -25,13 +25,13 @@ import java.util.stream.Collectors;
 
 @Component
 @Data
-public class TuiRequest {
+public class TuiRequest implements Request {
     //Beans to inject:
     private Gson gson;
     //static
-    private static DateTimeFormatter TUI_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    private static String SITE = "wypoczynek/wyniki-wyszukiwania-samolot";
-    private static String OFFER_TYPE = "BY_PLANE";
+    public static DateTimeFormatter TUI_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static String SITE = "wypoczynek/wyniki-wyszukiwania-samolot";
+    public static String OFFER_TYPE = "BY_PLANE";
     //Request customization fields:
     private List<LocalDate> childrenBirthdays = Collections.singletonList(LocalDate.of(2019, 3, 5));
     private List<String> departuresCodes = Collections.singletonList("WAW");
@@ -45,6 +45,7 @@ public class TuiRequest {
     private int page = 0;
     private int pageSize = 30;
 
+    @Override
     public HttpEntity prepareHttpEntity(int read) {
         this.page = read;
         return prepareHttpEntity();

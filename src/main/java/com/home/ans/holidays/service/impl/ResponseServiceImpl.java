@@ -23,6 +23,7 @@ public class ResponseServiceImpl implements ResponseService {
     private RestTemplate restTemplate;
     private ResponseStorage responseStorage;
 
+    @Override
     public ResponseEntity requestForOffers(URI url, HttpEntity requestEntity) {
         try {
             ResponseEntity response = restTemplate.exchange(

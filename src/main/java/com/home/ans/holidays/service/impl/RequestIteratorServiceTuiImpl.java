@@ -25,6 +25,7 @@ public class RequestIteratorServiceTuiImpl implements RequestIteratorService {
 
     private TuiRequest tuiRequest;
     private ResponseService responseService;
+    private ResponseServiceSpecialImpl responseServiceSpecial;
     private ParserService parserService;
     private TuiCdtoDtoConverter cdtoDtoConverter;
 
@@ -35,7 +36,7 @@ public class RequestIteratorServiceTuiImpl implements RequestIteratorService {
         ResponseEntity response;
         int cnt = 0;
         do {
-            response = this.getResponse(tuiRequest.prepareHttpEntity(cnt));
+            response = cnt == 0 ? getInitResponse(tuiRequest) : getResponse(tuiRequest.prepareHttpEntity(cnt));
             //emergency loop exit
             if (!response.getStatusCode().is2xxSuccessful()) break;
             singleShotOffers = convertToDto(response);
@@ -48,6 +49,10 @@ public class RequestIteratorServiceTuiImpl implements RequestIteratorService {
         else log.warn("No TUI offer matching given criteria downloaded!");
 
         return dtos;
+    }
+
+    private ResponseEntity getInitResponse(TuiRequest tuiRequest) {
+        return responseServiceSpecial.requestForOffers(tuiRequest);
     }
 
     private ResponseEntity getResponse(HttpEntity requestEntity) {
@@ -79,5 +84,10 @@ public class RequestIteratorServiceTuiImpl implements RequestIteratorService {
     @Autowired
     public void setCdtoDtoConverter(TuiCdtoDtoConverter cdtoDtoConverter) {
         this.cdtoDtoConverter = cdtoDtoConverter;
+    }
+
+    @Autowired
+    public void setResponseServiceSpecial(ResponseServiceSpecialImpl responseServiceSpecial) {
+        this.responseServiceSpecial = responseServiceSpecial;
     }
 }

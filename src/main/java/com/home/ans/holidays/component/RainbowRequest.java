@@ -20,7 +20,7 @@ import java.util.Objects;
 
 @Component
 @Data
-public class RainbowRequest {
+public class RainbowRequest implements Request {
     //Beans to inject:
     private Gson gson;
     private DateTimeFormatter formatter;
@@ -34,6 +34,7 @@ public class RainbowRequest {
     private int read = 0;
     private int toDownload = 18;
 
+    @Override
     public HttpEntity prepareHttpEntity(int read) {
         this.read = read;
         return prepareHttpEntity();
