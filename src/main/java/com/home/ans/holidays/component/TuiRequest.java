@@ -1,19 +1,14 @@
 package com.home.ans.holidays.component;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.home.ans.holidays.model.dto.TuiPayload;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
@@ -25,13 +20,12 @@ import java.util.stream.Collectors;
 
 @Component
 @Data
-public class TuiRequest implements Request {
+public class TuiRequest {
     //Beans to inject:
     private Gson gson;
     //static
-    public static DateTimeFormatter TUI_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-    public static String SITE = "wypoczynek/wyniki-wyszukiwania-samolot";
-    public static String OFFER_TYPE = "BY_PLANE";
+    private static final String CORE_URL = "https://www.tui.pl/wypoczynek/wyniki-wyszukiwania-samolot?q=:price";
+    private static final DateTimeFormatter TUI_DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     //Request customization fields:
     private List<LocalDate> childrenBirthdays = Collections.singletonList(LocalDate.of(2019, 3, 5));
     private List<String> departuresCodes = Collections.singletonList("WAW");
@@ -44,46 +38,26 @@ public class TuiRequest implements Request {
     private int minHotelStandard = 3;
     private int page = 0;
     private int pageSize = 30;
+    private URI searchUrl = generateUrl(this.page);
 
-    @Override
-    public HttpEntity prepareHttpEntity(int read) {
-        this.page = read;
-        return prepareHttpEntity();
-    }
-
-    private HttpEntity prepareHttpEntity() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setAccept(Lists.newArrayList(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(gson.toJson(prepareBody()), headers);
-    }
-
-    private TuiPayload prepareBody() {
-
-        TuiPayload requestBody = TuiPayload.builder()
-                .offerType(OFFER_TYPE)
-                .childrenBirthdays(childrenBirthdays.stream().map(birthday -> birthday.format(TUI_DATE_FORMATTER)).collect(Collectors.toList()))
-                .departuresCodes(departuresCodes)
-                .destinationsCodes(destinationsCodes)
-                .numberOfAdults(numberOfAdults)
-                .departureDateFrom(departureDateFrom.format(TUI_DATE_FORMATTER))
-                .durationFrom(String.valueOf(durationFrom))
-                .durationTo(String.valueOf(durationTo))
-                .site(SITE)
-                .build();
-
-        requestBody.setMetadata(requestBody.new Metadata(page, pageSize, "price"));
-
-        requestBody.setFilters(
-                ImmutableList.of(
-                        requestBody.new Filter("board", boardTypes),
-                        requestBody.new Filter("amountRange", Collections.singletonList("defaultAmountRange")),
-                        requestBody.new Filter("minHotelCategory", Collections.singletonList(minHotelStandard + "s")),
-                        requestBody.new Filter("tripAdvisorRating", Collections.singletonList("defaultTripAdvisorRating")),
-                        requestBody.new Filter("beach_distance", Collections.singletonList("defaultBeachDistance"))
-                )
-        );
-
-        return requestBody;
+    public URI generateUrl(int cnt) {
+        String url = CORE_URL +
+                ":byPlane:T" +
+                departuresCodes.stream().map(Prefix.AIRPORT.getPrefix()::concat).collect(Collectors.joining()) +
+                Prefix.DURATION_FROM.getPrefix() + durationFrom +
+                Prefix.DURATION_TO.getPrefix() + durationTo +
+                Prefix.START_DATE.getPrefix() + departureDateFrom.format(TUI_DATE_FORMATTER) +
+                Prefix.ADULT_COUNT.getPrefix() + numberOfAdults +
+                Prefix.CHILD_COUNT.getPrefix() + childrenBirthdays.size() +
+                childrenBirthdays.stream().map(s -> s.format(TUI_DATE_FORMATTER)).map(Prefix.BIRTH.getPrefix()::concat).collect(Collectors.joining()) +
+                destinationsCodes.stream().map(Prefix.CODE.getPrefix()::concat).collect(Collectors.joining()) +
+                boardTypes.stream().map(Prefix.BOARD_TYPE.getPrefix()::concat).map(b -> b.replace(" ", "%2520")).collect(Collectors.joining()) +
+                ":amountRange:defaultAmountRange" +
+                ":minHotelCategory:" + minHotelStandard + "s" +
+                ":tripAdvisorRating:defaultTripAdvisorRating" +
+                ":beach_distance:defaultBeachDistance" +
+                ":tripType:WS&fullPrice=false&page=" + cnt;
+        return URI.create(url);
     }
 
     @Getter
@@ -144,6 +118,22 @@ public class TuiRequest implements Request {
                     .map(BoardType::getCode)
                     .collect(Collectors.toList());
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    public enum Prefix {
+        AIRPORT(":a:"),
+        BIRTH(":birthDate:"),
+        BOARD_TYPE(":board:"),
+        CODE(":c:"),
+        DURATION_FROM(":dF:"),
+        DURATION_TO(":dT:"),
+        START_DATE(":startDate:"),
+        ADULT_COUNT(":ctAdult:"),
+        CHILD_COUNT(":ctChild:");
+
+        private String prefix;
     }
 
     @Autowired

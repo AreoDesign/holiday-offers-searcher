@@ -14,7 +14,9 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Service
@@ -22,6 +24,8 @@ import java.util.function.Function;
 public class ParserServiceTuiImpl implements ParserService {
 
     private static final String KEY_FOR_OFFERS = "offers";
+    private static final String START_PHRASE = "window.TUI.ng_precomposed = ";
+    public static final String END_PHRASE = "window.TUI.gs_precomposed = ";
     private Function<ResponseEntity, LocalDateTime> headerDateTypeConverter;
     private Gson gson;
     private Type tuiType = new TypeToken<ArrayList<TuiOfferClientDto>>() {
@@ -35,11 +39,16 @@ public class ParserServiceTuiImpl implements ParserService {
 
     @Override
     public Collection<TuiOfferClientDto> parse(ResponseEntity response) {
-        String responseBody = (String) response.getBody();
-        Collection<TuiOfferClientDto> cdtos = offersParser.apply(responseBody);
-        cdtos.forEach(cdto -> cdto.setRequestDate(headerDateTypeConverter.apply(response)));
+        String entireResponseBody = (String) response.getBody();
+        if (Objects.nonNull(entireResponseBody)) {
+            String responseBody = entireResponseBody.substring(entireResponseBody.indexOf(START_PHRASE) + START_PHRASE.length(), entireResponseBody.indexOf(END_PHRASE));
+            Collection<TuiOfferClientDto> cdtos = offersParser.apply(responseBody);
+            cdtos.forEach(cdto -> cdto.setRequestDate(headerDateTypeConverter.apply(response)));
+            return cdtos;
+        } else {
+            return Collections.emptyList();
+        }
 
-        return cdtos;
     }
 
     @Autowired

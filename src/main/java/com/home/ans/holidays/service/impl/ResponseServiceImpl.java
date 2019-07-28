@@ -24,16 +24,16 @@ public class ResponseServiceImpl implements ResponseService {
     private ResponseStorage responseStorage;
 
     @Override
-    public ResponseEntity requestForOffers(URI url, HttpEntity requestEntity) {
+    public ResponseEntity requestForOffers(URI url, HttpMethod method, HttpEntity requestEntity) {
         try {
             ResponseEntity response = restTemplate.exchange(
                     url,
-                    HttpMethod.POST,
+                    method,
                     requestEntity,
                     String.class
             );
             responseStorage.logStatus(response);
-            responseStorage.writeToFile(response);
+//            responseStorage.writeToFile(response); todo: temporarily commented
             responseStorage.cleanLogs(7);
             return response;
         } catch (RestClientException ex) {

@@ -59,6 +59,8 @@ public class ResponseStorage {
                     .append(System.lineSeparator())
                     .append(String.format("HTTP STATUS: %d", response.getStatusCodeValue()))
                     .append(System.lineSeparator())
+                    .append(String.format("HEADERS: %s", response.getHeaders()))
+                    .append(System.lineSeparator())
                     .append((String) response.getBody())
                     .append(System.lineSeparator());
             log.info("The response has been saved to location: {}", filePath.getParent());

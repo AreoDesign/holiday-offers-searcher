@@ -13,11 +13,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,13 +30,13 @@ public class RequestIteratorServiceRainbowImpl implements RequestIteratorService
     private RainbowCdtoDtoConverter cdtoDtoConverter;
 
     @Override
-    public List<RainbowOfferDto> iterateRequests() {
-        List<RainbowOfferDto> dtos = Lists.newLinkedList();
-        List<RainbowOfferDto> singleShotOffers;
+    public Collection<RainbowOfferDto> iterateRequests() {
+        Collection<RainbowOfferDto> dtos = Lists.newLinkedList();
+        Collection<RainbowOfferDto> singleShotOffers;
         ResponseEntity response;
         int cnt = 0;
         do {
-            response = this.getResponse(rainbowRequest.prepareHttpEntity(cnt * rainbowRequest.getToDownload()));
+            response = getResponse(rainbowRequest.prepareHttpEntity(cnt * rainbowRequest.getToDownload()));
             //emergency loop exit
             if (!response.getStatusCode().is2xxSuccessful()) break;
             singleShotOffers = convertToDto(response);
@@ -52,10 +52,10 @@ public class RequestIteratorServiceRainbowImpl implements RequestIteratorService
     }
 
     private ResponseEntity getResponse(HttpEntity requestEntity) {
-        return responseService.requestForOffers(Request.RAINBOW_TOURS.getUrl(), requestEntity);
+        return responseService.requestForOffers(Request.RAINBOW_TOURS.getUrl(), HttpMethod.POST, requestEntity);
     }
 
-    private List<RainbowOfferDto> convertToDto(ResponseEntity response) {
+    private Collection<RainbowOfferDto> convertToDto(ResponseEntity response) {
         Collection<RainbowOfferClientDto> cdtos = (Collection<RainbowOfferClientDto>) parserService.parse(response);
         return cdtos.stream()
                 .map(cdtoDtoConverter::toDto)
