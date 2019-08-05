@@ -1,7 +1,7 @@
 package com.home.ans.holidays.controller;
 
-import com.google.common.collect.ImmutableSet;
 import com.home.ans.holidays.converter.mapstruct.tui.TuiEntityDtoConverter;
+import com.home.ans.holidays.entity.OfferEntity;
 import com.home.ans.holidays.entity.TuiOfferEntity;
 import com.home.ans.holidays.model.dto.TuiOfferDto;
 import com.home.ans.holidays.repository.TuiOfferRepository;
@@ -21,10 +21,6 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import static com.home.ans.holidays.component.TuiRequest.BoardType.ALL_INCLUSIVE;
-import static com.home.ans.holidays.component.TuiRequest.BoardType.FULL_BOARD;
-import static com.home.ans.holidays.component.TuiRequest.BoardType.getCodesForBoardTypes;
-
 @RestController
 @RequestMapping("/travel/tui")
 @Slf4j
@@ -35,13 +31,15 @@ public class TuiClient {
     private TuiOfferRepository offerRepository;
     private NotificationService notificationService;
 
-    private Predicate<? super TuiOfferEntity> notificationCriterion = offer -> offer.getDestination().contains("Grecja") &&
+            /*
+            offer -> offer.getDestination().contains() &&
             offer.getDuration().compareTo(6) > 0 &&
-            getCodesForBoardTypes(ImmutableSet.of(ALL_INCLUSIVE, FULL_BOARD)).contains(offer.getBoardType()) &&
+            translateValues(ImmutableSet.of(ALL_INCLUSIVE, FULL_BOARD)).contains(offer.getBoardType()) &&
             offer.getDepartureDateAndTime().isAfter(LocalDateTime.of(2019, 9, 1, 0, 0)) &&
             offer.getDepartureDateAndTime().isBefore(LocalDateTime.of(2019, 10, 31, 24, 59)) &&
             ((offer.getHotelStandard() > 4d && offer.getDiscountPerPersonPrice() < 1500) ||
                     (offer.getHotelStandard() > 3d && offer.getDiscountPerPersonPrice() < 1200));
+             */
 
     @GetMapping("/offer")
     public ResponseEntity makeCascadeRequest() {
@@ -51,6 +49,7 @@ public class TuiClient {
                 .collect(Collectors.toList());
         entities = offerRepository.saveAll(entities);
 
+        Predicate<? super OfferEntity> notificationCriterion = null; //todo
         entities.stream().filter(notificationCriterion).forEach(offer -> notificationService.notifyAboutTuiOffer(offer));
 
         return ResponseEntity.ok()

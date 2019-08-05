@@ -99,7 +99,6 @@ public class ResponseStorage {
     }
 
     private String getFilePath() {
-//        System.getenv().entrySet().forEach(entry -> log.info("key: {}, value: {}", entry.getKey(), entry.getValue()));
         return System.getenv("HOMEDRIVE")
                 .concat(System.getenv("HOMEPATH"))
                 .concat(PATH_SEPARATOR)
