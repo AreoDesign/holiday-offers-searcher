@@ -2,13 +2,15 @@ package com.home.ans.holidays.model.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Builder
-public class RainbowOfferDto {
+public class RainbowOfferDto extends OfferDto {
     private LocalDateTime dataZapytania;
     private String ofertaId;
     private String ofertaUrl;

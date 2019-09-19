@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ParserServiceImplTest {
+public class ParserServiceRainbowImplTest {
 
     private Gson gson;
     private ParserService parserService;
@@ -33,7 +33,7 @@ public class ParserServiceImplTest {
                 .header("Date", "Tue, 02 Jul 2019 18:25:55 GMT")
                 .body(prepareResponseBodyJson());
 //        when
-        Collection<RainbowOfferClientDto> cdtos = parserService.parse(responseEntity);
+        Collection<RainbowOfferClientDto> cdtos = (Collection<RainbowOfferClientDto>) parserService.parse(responseEntity);
 //        then
         assertThat(cdtos).contains(clientDto);
     }
@@ -221,7 +221,7 @@ public class ParserServiceImplTest {
     }
 
     @Autowired
-    public void setParserService(@Qualifier("parserServiceImpl") ParserService parserService) {
+    public void setParserService(@Qualifier("parserServiceRainbowImpl") ParserService parserService) {
         this.parserService = parserService;
     }
 }

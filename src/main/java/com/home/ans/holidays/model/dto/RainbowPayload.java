@@ -8,7 +8,7 @@ import java.util.List;
 
 @Builder
 @Data
-public class RainbowRequestPayload {
+public class RainbowPayload {
 
     private Konfiguracja konfiguracja;
     private Sortowanie sortowanie;

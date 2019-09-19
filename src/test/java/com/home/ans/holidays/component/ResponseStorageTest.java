@@ -14,7 +14,7 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.function.Function;
 
-import static com.home.ans.holidays.service.impl.ParserServiceImplTest.prepareResponseBodyJson;
+import static com.home.ans.holidays.service.impl.ParserServiceRainbowImplTest.prepareResponseBodyJson;
 import static org.testng.Assert.assertTrue;
 
 public class ResponseStorageTest {

@@ -3,6 +3,7 @@ package com.home.ans.holidays.service.impl;
 import com.home.ans.holidays.configuration.db.ConfigEntity;
 import com.home.ans.holidays.configuration.db.ConfigRepository;
 import com.home.ans.holidays.entity.RainbowOfferEntity;
+import com.home.ans.holidays.entity.TuiOfferEntity;
 import com.home.ans.holidays.service.NotificationService;
 import com.sun.mail.smtp.SMTPTransport;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,29 @@ public class NotificationServiceImpl implements NotificationService {
     private ConfigRepository configRepository;
 
     @Override
-    public void notifyAboutOffer(RainbowOfferEntity offer) {
+    public void notifyAboutRainbowOffer(RainbowOfferEntity offer) {
+        Properties prop = prepareProperties();
+
+        Authenticator auth = new SMTPAuthenticator();
+        Session session = Session.getInstance(prop, auth);
+        Message msg = new MimeMessage(session);
+
+        try (SMTPTransport t = (SMTPTransport) session.getTransport("smtp")) {
+            msg.setFrom(new InternetAddress(EMAIL_SENDER_ADDRESS));
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(updateRecipients(), false));
+            msg.setSubject(prepareSubject(offer));
+            msg.setText(prepareMessageText(offer));
+            msg.setSentDate(new Date());
+
+            t.connect(SMTP_SERVER, LOGIN, PASSWORD);
+            t.sendMessage(msg, msg.getAllRecipients());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void notifyAboutTuiOffer(TuiOfferEntity offer) {
         Properties prop = prepareProperties();
 
         Authenticator auth = new SMTPAuthenticator();
@@ -64,20 +87,33 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     private String prepareMessageText(RainbowOfferEntity offer) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Lokalizacja: " + offer.getLokalizacja());
-        sb.append("\nhotel: " + offer.getNazwaHotelu() + " " + offer.getGwiazdkiHotelu() + "*");
-        sb.append("\nwylot: " + offer.getDataWKodzieProduktu());
-        sb.append("\ndlugosc pobytu: " + offer.getLiczbaDni());
-        sb.append("\ncena: " + offer.getCenaAktualna());
-        sb.append("\nwyzywienie: " + offer.getWyzywienie());
-        sb.append("\nURL: " + offer.getOfertaUrl());
 
-        return sb.toString();
+        return "Lokalizacja: " + offer.getLokalizacja() +
+                "\nhotel: " + offer.getNazwaHotelu() + " " + offer.getGwiazdkiHotelu() + "*" +
+                "\nwylot: " + offer.getDataWKodzieProduktu() +
+                "\ndlugosc pobytu: " + offer.getLiczbaDni() +
+                "\ncena: " + offer.getCenaAktualna() +
+                "\nwyzywienie: " + offer.getWyzywienie() +
+                "\nURL: " + offer.getOfertaUrl();
+    }
+
+    private String prepareMessageText(TuiOfferEntity offer) {
+
+        return "Lokalizacja: " + offer.getDestination() +
+                "\nhotel: " + offer.getHotelName() + " " + offer.getHotelStandard() + "*" +
+                "\nwylot: " + offer.getDepartureDateAndTime() +
+                "\ndlugosc pobytu: " + offer.getDuration() +
+                "\ncena: " + offer.getDiscountPerPersonPrice() +
+                "\nwyzywienie: " + offer.getBoardType() +
+                "\nURL: " + offer.getOfferUrl();
     }
 
     private String prepareSubject(RainbowOfferEntity offer) {
         return String.format("NOWA OFERTA! %s %s* na %d dni, za %d PLN", offer.getLokalizacja(), offer.getGwiazdkiHotelu().toString(), offer.getLiczbaDni(), offer.getCenaAktualna());
+    }
+
+    private String prepareSubject(TuiOfferEntity offer) {
+        return String.format("NOWA OFERTA! %s %s* na %d dni, za %d PLN", offer.getDestination(), offer.getHotelStandard().toString(), offer.getDuration(), offer.getDiscountPerPersonPrice());
     }
 
     private Properties prepareProperties() {
