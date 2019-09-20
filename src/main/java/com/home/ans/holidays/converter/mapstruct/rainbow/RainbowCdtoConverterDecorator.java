@@ -15,14 +15,14 @@ public abstract class RainbowCdtoConverterDecorator implements RainbowCdtoDtoCon
     @Override
     public RainbowOfferDto toDto(RainbowOfferClientDto clientDto) {
         RainbowOfferDto dto = delegate.toDto(clientDto);
-        dto.setOfertaUrl(RAINBOW_PREFIX + clientDto.getOfertaUrl());
+        dto.setOfferUrl(RAINBOW_PREFIX + clientDto.getOfferUrl());
         return dto;
     }
 
     @Override
     public RainbowOfferClientDto toClientDto(RainbowOfferDto dto) {
         RainbowOfferClientDto cdto = delegate.toClientDto(dto);
-        cdto.setOfertaUrl(dto.getOfertaUrl().replace(RAINBOW_PREFIX, StringUtils.EMPTY));
+        cdto.setOfferUrl(dto.getOfferUrl().replace(RAINBOW_PREFIX, StringUtils.EMPTY));
         return cdto;
     }
 

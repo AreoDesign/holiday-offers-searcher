@@ -1,10 +1,11 @@
 package com.home.ans.holidays.controller;
 
 import com.home.ans.holidays.converter.mapstruct.rainbow.RainbowEntityDtoConverter;
+import com.home.ans.holidays.dictionary.Destination;
 import com.home.ans.holidays.entity.RainbowOfferEntity;
 import com.home.ans.holidays.model.dto.RainbowOfferDto;
 import com.home.ans.holidays.presentation.RainbowDataImporter;
-import com.home.ans.holidays.repository.RainbowOfferRepository;
+import com.home.ans.holidays.repository.OfferRepository;
 import com.home.ans.holidays.service.NotificationService;
 import com.home.ans.holidays.service.RequestIteratorService;
 import com.home.ans.holidays.service.impl.RequestIteratorServiceRainbowImpl;
@@ -19,11 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,18 +29,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RainbowClient {
 
-    private RainbowOfferRepository rainbowOfferRepository;
+    private OfferRepository offerRepository;
     private RequestIteratorService requestIteratorService;
     private RainbowEntityDtoConverter entityDtoConverter;
     private RainbowDataImporter rainbowDataImporter;
     private NotificationService notificationService;
-    private Predicate<? super RainbowOfferEntity> notificationCriterion = offer -> offer.getLokalizacja().contains("Grecja") &&
-            offer.getLiczbaDni().compareTo(7) > 0 &&
-            Arrays.asList("all-inclusive", "3-posilki").contains(offer.getWyzywienie()) &&
-            offer.getDataWKodzieProduktu().isAfter(LocalDate.of(2019, 9, 1)) &&
-            offer.getDataWKodzieProduktu().isBefore(LocalDate.of(2019, 9, 30)) &&
-            ((offer.getGwiazdkiHotelu() > 4d && offer.getCenaAktualna() < 1500) ||
-                    (offer.getGwiazdkiHotelu() > 3d && offer.getCenaAktualna() < 1200));
+//    private Predicate<? super RainbowOfferEntity> notificationCriterion = offer -> offer.getLokalizacja().contains("Grecja") &&
+//            offer.getLiczbaDni().compareTo(7) > 0 &&
+//            Arrays.asList("all-inclusive", "3-posilki").contains(offer.getWyzywienie()) &&
+//            offer.getDataWKodzieProduktu().isAfter(LocalDate.of(2019, 9, 1)) &&
+//            offer.getDataWKodzieProduktu().isBefore(LocalDate.of(2019, 10, 14)) &&
+//            ((offer.getGwiazdkiHotelu() > 4d && offer.getCenaAktualna() < 2100) ||
+//                    (offer.getGwiazdkiHotelu() > 3d && offer.getCenaAktualna() < 1700));
 
     @GetMapping("/offer")
     public ResponseEntity makeCascadeRequest() {
@@ -50,9 +48,10 @@ public class RainbowClient {
         List<RainbowOfferEntity> entities = dtos.stream()
                 .map(entityDtoConverter::toEntity)
                 .collect(Collectors.toList());
-        entities = rainbowOfferRepository.saveAll(entities);
+        entities = offerRepository.saveAll(entities);
 
-        entities.stream().filter(notificationCriterion).forEach(offer -> notificationService.notifyAboutRainbowOffer(offer));
+        entities.stream().filter(o -> o.getDestination() == Destination.GREECE)
+                .forEach(offer -> notificationService.notifyAboutRainbowOffer(offer));
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.DATE, LocalDateTime.now().toString())
@@ -83,8 +82,8 @@ public class RainbowClient {
     }
 
     @Autowired
-    public void setRainbowOfferRepository(RainbowOfferRepository rainbowOfferRepository) {
-        this.rainbowOfferRepository = rainbowOfferRepository;
+    public void setOfferRepository(OfferRepository offerRepository) {
+        this.offerRepository = offerRepository;
     }
 
     @Autowired

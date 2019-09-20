@@ -1,0 +1,15 @@
+Hotel:
+- gdzie
+- rating
+- ilosc gwiazdek
+
+Odpytanie:
+- kiedy odpytano?
+- termin wyjazdu
+- ilość dni
+- cena itd
+- url oferty
+
+Dodąć:
+- rating na TripAdvisor
+- możliwość pomijania hoteli w kryterium wyszukiwania/filtrowania

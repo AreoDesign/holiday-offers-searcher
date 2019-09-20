@@ -9,20 +9,14 @@ import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-@Builder
 public class RainbowOfferDto extends OfferDto {
-    private LocalDateTime dataZapytania;
-    private String ofertaId;
-    private String ofertaUrl;
-    private LocalDate dataWKodzieProduktu;
-    private String wyzywienie;
-    private Double ocenaOgolna;
-    private Integer cenaPrzedPromocja;
-    private Integer cenaAktualna;
-    private Integer liczbaDni;
-    private Integer procentPromocji;
-    private Integer hotelId;
-    private String nazwaHotelu;
-    private Double gwiazdkiHotelu;
-    private String lokalizacja;
+    private Double rating;
+    private Integer promotionPercentage;
+
+    @Builder
+    public RainbowOfferDto(LocalDateTime requestDate, String offerCode, String offerUrl, LocalDate departureDateAndTime, String boardType, Integer originalPerPersonPrice, Integer discountPerPersonPrice, Integer duration, Integer hotelCode, String hotelName, Double hotelStandard, String destination, String source, Double rating, Integer promotionPercentage) {
+        super(requestDate, offerCode, offerUrl, departureDateAndTime, boardType, originalPerPersonPrice, discountPerPersonPrice, duration, hotelCode, hotelName, hotelStandard, destination, source);
+        this.rating = rating;
+        this.promotionPercentage = promotionPercentage;
+    }
 }

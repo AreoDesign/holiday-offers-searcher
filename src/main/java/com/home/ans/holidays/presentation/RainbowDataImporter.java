@@ -1,7 +1,7 @@
 package com.home.ans.holidays.presentation;
 
-import com.home.ans.holidays.entity.RainbowOfferEntity;
-import com.home.ans.holidays.repository.RainbowOfferRepository;
+import com.home.ans.holidays.entity.OfferEntity;
+import com.home.ans.holidays.repository.OfferRepository;
 import org.jxls.template.SimpleExporter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,20 +15,20 @@ import java.util.List;
 @Service
 public class RainbowDataImporter {
 
-    private RainbowOfferRepository rainbowOfferRepository;
+    private OfferRepository offerRepository;
 
     public void toXls() throws IOException {
-        List<RainbowOfferEntity> offers = rainbowOfferRepository.findAll();
-        List<String> headers = Arrays.asList("lokalizacja", "nazwa hotelu", "cena aktualna", "wyżywienie", "gwiazdki hotelu", "liczba dni", "data wyjazdu", "ocena ogólna", "data zapytania");
-        String props = "lokalizacja, nazwaHotelu, cenaAktualna, wyzywienie, gwiazdkiHotelu, liczbaDni, dataWKodzieProduktu, ocenaOgolna, dataZapytania";
-        try (OutputStream os = new FileOutputStream("target/rainbow_offers_summary.xls")) {
+        List<OfferEntity> offers = offerRepository.findAll();
+        List<String> headers = Arrays.asList("lokalizacja", "nazwa hotelu", "cena aktualna", "wyżywienie", "gwiazdki hotelu", "liczba dni pobytu", "data wyjazdu", "ocena ogólna", "data zapytania");
+        String props = "destination, hotelName, cenaAktualna, boardType, hotelStandard, duration, departureDateAndTime, rating, requestDate";
+        try (OutputStream os = new FileOutputStream("target/offers_summary.xls")) {
             SimpleExporter exporter = new SimpleExporter();
             exporter.gridExport(headers, offers, props, os);
         }
     }
 
     @Autowired
-    public void setRainbowOfferRepository(RainbowOfferRepository rainbowOfferRepository) {
-        this.rainbowOfferRepository = rainbowOfferRepository;
+    public void setOfferRepository(OfferRepository offerRepository) {
+        this.offerRepository = offerRepository;
     }
 }

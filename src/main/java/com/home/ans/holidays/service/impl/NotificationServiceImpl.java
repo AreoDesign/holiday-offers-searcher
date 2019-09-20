@@ -2,10 +2,12 @@ package com.home.ans.holidays.service.impl;
 
 import com.home.ans.holidays.configuration.db.ConfigEntity;
 import com.home.ans.holidays.configuration.db.ConfigRepository;
+import com.home.ans.holidays.entity.OfferEntity;
 import com.home.ans.holidays.entity.RainbowOfferEntity;
 import com.home.ans.holidays.entity.TuiOfferEntity;
 import com.home.ans.holidays.service.NotificationService;
 import com.sun.mail.smtp.SMTPTransport;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.Date;
 import java.util.Properties;
 
 @Service
+@Slf4j
 public class NotificationServiceImpl implements NotificationService {
 
     private static final String MAIL_RECIPIENTS = "mail.recipients";
@@ -86,33 +89,19 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
-    private String prepareMessageText(RainbowOfferEntity offer) {
-
-        return "Lokalizacja: " + offer.getLokalizacja() +
-                "\nhotel: " + offer.getNazwaHotelu() + " " + offer.getGwiazdkiHotelu() + "*" +
-                "\nwylot: " + offer.getDataWKodzieProduktu() +
-                "\ndlugosc pobytu: " + offer.getLiczbaDni() +
-                "\ncena: " + offer.getCenaAktualna() +
-                "\nwyzywienie: " + offer.getWyzywienie() +
-                "\nURL: " + offer.getOfertaUrl();
-    }
-
-    private String prepareMessageText(TuiOfferEntity offer) {
+    //todo: change method parameter from entity to dto!
+    private String prepareMessageText(OfferEntity offer) {
 
         return "Lokalizacja: " + offer.getDestination() +
                 "\nhotel: " + offer.getHotelName() + " " + offer.getHotelStandard() + "*" +
                 "\nwylot: " + offer.getDepartureDateAndTime() +
-                "\ndlugosc pobytu: " + offer.getDuration() +
+                "\ndlugość pobytu: " + offer.getDuration() +
                 "\ncena: " + offer.getDiscountPerPersonPrice() +
-                "\nwyzywienie: " + offer.getBoardType() +
+                "\nwyżywienie: " + offer.getBoardType() +
                 "\nURL: " + offer.getOfferUrl();
     }
 
-    private String prepareSubject(RainbowOfferEntity offer) {
-        return String.format("NOWA OFERTA! %s %s* na %d dni, za %d PLN", offer.getLokalizacja(), offer.getGwiazdkiHotelu().toString(), offer.getLiczbaDni(), offer.getCenaAktualna());
-    }
-
-    private String prepareSubject(TuiOfferEntity offer) {
+    private String prepareSubject(OfferEntity offer) {
         return String.format("NOWA OFERTA! %s %s* na %d dni, za %d PLN", offer.getDestination(), offer.getHotelStandard().toString(), offer.getDuration(), offer.getDiscountPerPersonPrice());
     }
 
@@ -131,7 +120,9 @@ public class NotificationServiceImpl implements NotificationService {
         }
     }
 
+    @Deprecated
     private String updateRecipients() {
+        log.error("updateRecipients method invoked in class %s. Create new method to take mails from alert criteria repository", this.getClass().getSimpleName());
         return configRepository.findById(MAIL_RECIPIENTS).orElse(ConfigEntity.builder().value("").build()).getValue();
     }
 

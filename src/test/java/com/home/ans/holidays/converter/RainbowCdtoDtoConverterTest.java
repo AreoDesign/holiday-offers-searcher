@@ -34,20 +34,20 @@ public class RainbowCdtoDtoConverterTest {
 //        when
         RainbowOfferDto dto = converter.toDto(clientDto);
 //        then
-        assertThat(clientDto.getDataZapytania()).isEqualTo(dto.getDataZapytania());
-        assertThat(clientDto.getOfertaId()).isEqualTo(dto.getOfertaId());
-        assertThat(RAINBOW_PREFIX + clientDto.getOfertaUrl()).isEqualTo(dto.getOfertaUrl());
-        assertThat(stringToLocalDate(clientDto.getDataWKodzieProduktu())).isEqualTo(dto.getDataWKodzieProduktu());
-        assertThat(clientDto.getWyzywienie()).isEqualTo(dto.getWyzywienie());
-        assertThat(Double.valueOf(clientDto.getOcenaOgolna())).isEqualTo(dto.getOcenaOgolna());
-        assertThat(clientDto.getCenaPrzedPromocja()).isEqualTo(dto.getCenaPrzedPromocja());
-        assertThat(clientDto.getCenaAktualna()).isEqualTo(dto.getCenaAktualna());
-        assertThat(clientDto.getLiczbaDni()).isEqualTo(dto.getLiczbaDni());
-        assertThat(clientDto.getProcentPromocji()).isEqualTo(dto.getProcentPromocji());
-        assertThat(clientDto.getHotelId()).isEqualTo(dto.getHotelId());
-        assertThat(clientDto.getNazwaHotelu()).isEqualTo(dto.getNazwaHotelu());
-        assertThat(clientDto.getGwiazdkiHotelu()).isEqualTo(dto.getGwiazdkiHotelu());
-        assertThat(clientDto.getLokalizacja()).isEqualTo(dto.getLokalizacja());
+        assertThat(clientDto.getRequestDate()).isEqualTo(dto.getRequestDate());
+        assertThat(clientDto.getOfferCode()).isEqualTo(dto.getOfferCode());
+        assertThat(RAINBOW_PREFIX + clientDto.getOfferUrl()).isEqualTo(dto.getOfferUrl());
+        assertThat(stringToLocalDate(clientDto.getDepartureDateAndTime())).isEqualTo(dto.getDepartureDateAndTime());
+        assertThat(clientDto.getBoardType()).isEqualTo(dto.getBoardType());
+        assertThat(Double.valueOf(clientDto.getRating())).isEqualTo(dto.getRating());
+        assertThat(clientDto.getOriginalPerPersonPrice()).isEqualTo(dto.getOriginalPerPersonPrice());
+        assertThat(clientDto.getDiscountPerPersonPrice()).isEqualTo(dto.getDiscountPerPersonPrice());
+        assertThat(clientDto.getDuration()).isEqualTo(dto.getDuration());
+        assertThat(clientDto.getPromotionPercentage()).isEqualTo(dto.getPromotionPercentage());
+        assertThat(clientDto.getHotelCode()).isEqualTo(dto.getHotelCode());
+        assertThat(clientDto.getHotelName()).isEqualTo(dto.getHotelName());
+        assertThat(clientDto.getHotelStandard()).isEqualTo(dto.getHotelStandard());
+        assertThat(clientDto.getDestination()).isEqualTo(dto.getDestination());
 
     }
 

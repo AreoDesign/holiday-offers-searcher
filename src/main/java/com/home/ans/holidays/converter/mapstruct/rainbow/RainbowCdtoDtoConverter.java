@@ -16,7 +16,7 @@ public interface RainbowCdtoDtoConverter extends CdtoDtoConverter<RainbowOfferDt
     String RAINBOW_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @Mappings({
-            @Mapping(target = "dataWKodzieProduktu", source = "clientDto.dataWKodzieProduktu", dateFormat = RAINBOW_DATE_TIME_FORMAT)
+            @Mapping(target = "departureDateAndTime", source = "clientDto.departureDateAndTime", dateFormat = RAINBOW_DATE_TIME_FORMAT)
     })
     RainbowOfferDto toDto(RainbowOfferClientDto clientDto);
 

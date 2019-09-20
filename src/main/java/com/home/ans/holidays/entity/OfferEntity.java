@@ -2,6 +2,7 @@ package com.home.ans.holidays.entity;
 
 import com.home.ans.holidays.dictionary.BoardType;
 import com.home.ans.holidays.dictionary.Destination;
+import lombok.Data;
 import org.hibernate.annotations.DiscriminatorFormula;
 
 import javax.persistence.Entity;
@@ -19,7 +20,9 @@ import java.time.LocalDateTime;
 @Table(name = "travel_offer")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula("case when source = 'RAINBOW' then 'RAINBOW' else 'TUI' end")
+@Data
 public abstract class OfferEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

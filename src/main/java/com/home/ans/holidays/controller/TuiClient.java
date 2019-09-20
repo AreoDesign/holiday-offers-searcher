@@ -4,7 +4,7 @@ import com.home.ans.holidays.converter.mapstruct.tui.TuiEntityDtoConverter;
 import com.home.ans.holidays.entity.OfferEntity;
 import com.home.ans.holidays.entity.TuiOfferEntity;
 import com.home.ans.holidays.model.dto.TuiOfferDto;
-import com.home.ans.holidays.repository.TuiOfferRepository;
+import com.home.ans.holidays.repository.OfferRepository;
 import com.home.ans.holidays.service.NotificationService;
 import com.home.ans.holidays.service.RequestIteratorService;
 import com.home.ans.holidays.service.impl.RequestIteratorServiceTuiImpl;
@@ -28,18 +28,16 @@ public class TuiClient {
 
     private RequestIteratorService requestIteratorService;
     private TuiEntityDtoConverter entityDtoConverter;
-    private TuiOfferRepository offerRepository;
+    private OfferRepository offerRepository;
     private NotificationService notificationService;
 
-            /*
-            offer -> offer.getDestination().contains() &&
-            offer.getDuration().compareTo(6) > 0 &&
-            translateValues(ImmutableSet.of(ALL_INCLUSIVE, FULL_BOARD)).contains(offer.getBoardType()) &&
-            offer.getDepartureDateAndTime().isAfter(LocalDateTime.of(2019, 9, 1, 0, 0)) &&
-            offer.getDepartureDateAndTime().isBefore(LocalDateTime.of(2019, 10, 31, 24, 59)) &&
-            ((offer.getHotelStandard() > 4d && offer.getDiscountPerPersonPrice() < 1500) ||
-                    (offer.getHotelStandard() > 3d && offer.getDiscountPerPersonPrice() < 1200));
-             */
+//    private Predicate<? super TuiOfferEntity> notificationCriterion = offer -> offer.getDestination().contains("Grecja") &&
+//            getCodesForBoardTypes(ImmutableSet.of(ALL_INCLUSIVE, FULL_BOARD)).contains(offer.getBoardType()) &&
+//            offer.getDuration().compareTo(6) > 0 &&
+//            offer.getDepartureDateAndTime().isAfter(LocalDateTime.of(2019, 9, 1, 0, 0)) &&
+//            offer.getDepartureDateAndTime().isBefore(LocalDateTime.of(2019, 10, 14, 24, 59)) &&
+//            ((offer.getHotelStandard() > 4d && offer.getDiscountPerPersonPrice() < 2100) ||
+//                    (offer.getHotelStandard() > 3d && offer.getDiscountPerPersonPrice() < 1700));
 
     @GetMapping("/offer")
     public ResponseEntity makeCascadeRequest() {
@@ -50,7 +48,10 @@ public class TuiClient {
         entities = offerRepository.saveAll(entities);
 
         Predicate<? super OfferEntity> notificationCriterion = null; //todo
-        entities.stream().filter(notificationCriterion).forEach(offer -> notificationService.notifyAboutTuiOffer(offer));
+        entities.stream().filter(notificationCriterion).forEach(offer -> {
+            log.info("tui offer hits criteria - info send to mail");
+            notificationService.notifyAboutTuiOffer(offer);
+        });
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.DATE, LocalDateTime.now().toString())
@@ -68,7 +69,7 @@ public class TuiClient {
     }
 
     @Autowired
-    public void setOfferRepository(TuiOfferRepository offerRepository) {
+    public void setOfferRepository(OfferRepository offerRepository) {
         this.offerRepository = offerRepository;
     }
 
